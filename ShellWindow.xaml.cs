@@ -423,6 +423,7 @@ sealed partial class ShellWindow : Window
         {
             Content = panel,
             VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            MaxHeight = 450,
         };
 
         var dlg = new ContentDialog

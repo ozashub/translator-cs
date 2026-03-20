@@ -1,6 +1,6 @@
 [Setup]
 AppName=Translator
-AppVersion=1.0.1
+AppVersion=1.0.2
 AppPublisher=ozas
 AppPublisherURL=https://github.com/ozashub/translator-cs
 DefaultDirName={commonpf}\Translator
