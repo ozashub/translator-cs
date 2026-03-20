@@ -435,8 +435,6 @@ sealed partial class ShellWindow : Window
             DefaultButton = ContentDialogButton.Primary,
             Content = scroll,
         };
-        dlg.Style = new Style(typeof(ContentDialog));
-        dlg.MinWidth = 420;
 
         if (await dlg.ShowAsync() == ContentDialogResult.Primary)
         {
