@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Translator.ShellWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:models="using:Translator.Models"
+    Title="Translator">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+
+    <Grid RequestedTheme="Dark">
+        <Grid.Resources>
+            <Style x:Key="ChatItem" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="MinHeight" Value="0"/>
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="TitleBar" Grid.Row="0" Padding="16,0,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <FontIcon Glyph="&#xE8C1;" FontSize="14" Opacity="0.7"/>
+                <TextBlock Text="Translator" FontSize="13" Opacity="0.85" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <ListView x:Name="HistoryList" SelectionMode="None" Padding="12,8,12,8"
+                      ItemContainerStyle="{StaticResource ChatItem}"
+                      IsItemClickEnabled="False">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel VerticalAlignment="Bottom"
+                                         ItemsUpdatingScrollMode="KeepLastItemInView"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                    </TransitionCollection>
+                </ListView.ItemContainerTransitions>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ChatEntry">
+                        <Border CornerRadius="8" Padding="14,12" Margin="0,4"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                BorderThickness="0">
+                            <Border.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Copy result" Click="OnCopyResult">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8C8;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem Text="Copy original" Click="OnCopyOriginal">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8C8;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutSeparator/>
+                                    <MenuFlyoutItem Text="Remove" Click="OnRemoveEntry">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE74D;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </Border.ContextFlyout>
+                            <StackPanel Spacing="8">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Border CornerRadius="4" Padding="8,3"
+                                                Background="{ThemeResource AccentFillColorDefaultBrush}">
+                                            <TextBlock Text="{x:Bind Operations}"
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="6"
+                                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button Click="OnRemoveEntry" Padding="4,3"
+                                                Background="Transparent" BorderThickness="0"
+                                                ToolTipService.ToolTip="Remove"
+                                                Opacity="0.4">
+                                            <FontIcon Glyph="&#xE74D;" FontSize="12"/>
+                                        </Button>
+                                        <TextBlock Text="{x:Bind TimeText}" FontSize="11"
+                                                   Opacity="0.3" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Text="{x:Bind Original}" TextWrapping="Wrap"
+                                           MaxLines="{x:Bind OrigMaxLines, Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis"
+                                           Opacity="0.5" FontSize="13"
+                                           IsTextSelectionEnabled="True"/>
+
+                                <ProgressBar IsIndeterminate="True"
+                                             Visibility="{x:Bind ProcessingVis, Mode=OneWay}"
+                                             Margin="0,2"/>
+
+                                <TextBlock Text="{x:Bind Result, Mode=OneWay}"
+                                           TextWrapping="Wrap" FontSize="14"
+                                           MaxLines="{x:Bind ResMaxLines, Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis"
+                                           IsTextSelectionEnabled="True"
+                                           Visibility="{x:Bind ResultVis, Mode=OneWay}"/>
+
+                                <HyperlinkButton Content="{x:Bind ExpandText, Mode=OneWay}"
+                                                 Click="OnExpand"
+                                                 Padding="0" FontSize="12"
+                                                 Visibility="{x:Bind ExpandVis, Mode=OneWay}"/>
+
+                                <TextBlock Text="{x:Bind ErrorMsg, Mode=OneWay}"
+                                           Foreground="#E05555"
+                                           FontSize="12" Opacity="0.9"
+                                           TextWrapping="Wrap"
+                                           Visibility="{x:Bind FailedVis, Mode=OneWay}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel x:Name="EmptyState" VerticalAlignment="Center"
+                        HorizontalAlignment="Center" Spacing="12" Opacity="0.25">
+                <FontIcon Glyph="&#xE943;" FontSize="40" HorizontalAlignment="Center"/>
+                <TextBlock Text="Press your hotkey in any text field" FontSize="13"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="2" Padding="12,8"
+                BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                BorderThickness="0,1,0,0">
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ToggleButton x:Name="EnableToggle" IsChecked="True"
+                              Grid.Column="0"
+                              Click="OnToggle" Padding="6,4"
+                              ToolTipService.ToolTip="Enable/Disable hotkey"
+                              MinWidth="0" MinHeight="0">
+                    <FontIcon x:Name="ToggleIcon" Glyph="&#xE768;" FontSize="12"/>
+                </ToggleButton>
+                <ProgressRing x:Name="StatusRing" IsActive="False"
+                              Grid.Column="1"
+                              Width="14" Height="14" VerticalAlignment="Center"/>
+                <TextBlock x:Name="StatusText" Text="Ready"
+                           Grid.Column="2"
+                           FontSize="12" Opacity="0.5" VerticalAlignment="Center"/>
+                <Border Grid.Column="3" CornerRadius="4" Padding="6,3"
+                        Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock x:Name="HotkeyText" FontSize="11" Opacity="0.5"
+                               FontFamily="Consolas"/>
+                </Border>
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="2">
+                    <Button Click="OnClear" Padding="7,5"
+                            ToolTipService.ToolTip="Clear history">
+                        <FontIcon Glyph="&#xE74D;" FontSize="13"/>
+                    </Button>
+                    <Button Click="OnSettings" Padding="7,5"
+                            ToolTipService.ToolTip="Settings">
+                        <FontIcon Glyph="&#xE713;" FontSize="13"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="UpdateOverlay" Grid.RowSpan="3" Visibility="Collapsed"
+              Background="#CC000000">
+            <Grid.ChildrenTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition/>
+                </TransitionCollection>
+            </Grid.ChildrenTransitions>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Spacing="16" Padding="40,32" CornerRadius="12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <TextBlock x:Name="UpdateStatus" Text="Checking for updates..."
+                           FontSize="14" HorizontalAlignment="Center"/>
+                <ProgressBar x:Name="UpdateProgress" Value="0" Maximum="100"
+                             Width="280" Height="4"
+                             Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                <TextBlock x:Name="UpdatePct" Text="0%" FontSize="11"
+                           Opacity="0.4" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

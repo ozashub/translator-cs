@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+publish/
+*.zip
+translator-cs.csproj.user
+Package.appxmanifest
