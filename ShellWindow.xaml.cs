@@ -284,7 +284,7 @@ sealed partial class ShellWindow : Window
 
     async void OnSettings(object sender, RoutedEventArgs e)
     {
-        var panel = new StackPanel { Spacing = 20, Width = 400 };
+        var panel = new StackPanel { Spacing = 20 };
 
         var keyHeader = new TextBlock
         {
@@ -299,8 +299,7 @@ sealed partial class ShellWindow : Window
             PlaceholderText = "sk-...",
             FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Consolas"),
             FontSize = 13,
-            Width = 340,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
         };
         if (_apiKey != null)
             keyBox.Text = $"{_apiKey[..7]}****{_apiKey[^4..]}";
@@ -434,13 +433,9 @@ sealed partial class ShellWindow : Window
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary,
             Content = scroll,
-            Resources =
-            {
-                ["ContentDialogMaxWidth"] = 600.0,
-                ["ContentDialogMinWidth"] = 400.0,
-                ["ContentDialogMaxHeight"] = 800.0,
-            },
         };
+        dlg.Style = new Style(typeof(ContentDialog));
+        dlg.MinWidth = 420;
 
         if (await dlg.ShowAsync() == ContentDialogResult.Primary)
         {
