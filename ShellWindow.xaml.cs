@@ -299,7 +299,8 @@ sealed partial class ShellWindow : Window
             PlaceholderText = "sk-...",
             FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Consolas"),
             FontSize = 13,
-            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            MaxWidth = 300,
         };
         if (_apiKey != null)
             keyBox.Text = $"{_apiKey[..7]}****{_apiKey[^4..]}";
