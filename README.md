@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Assets/icon.svg" width="128" height="128" alt="Translator">
+</p>
+
 # Translator
 
 A Windows desktop app that rewrites selected text using OpenAI. Press a global hotkey in any application and it selects the text, sends it through the API, and pastes the result back in place. Built with WinUI 3 and .NET 8.

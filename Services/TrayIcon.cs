@@ -53,6 +53,10 @@ sealed class TrayIcon : IDisposable
     static extern bool Shell_NotifyIconW(uint msg, ref NID data);
     [DllImport("user32.dll")]
     static extern IntPtr LoadIconW(IntPtr inst, IntPtr name);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    static extern IntPtr LoadImageW(IntPtr inst, string name, uint type, int cx, int cy, uint flags);
+    [DllImport("user32.dll")]
+    static extern bool DestroyIcon(IntPtr icon);
     [DllImport("user32.dll")]
     static extern IntPtr CreatePopupMenu();
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
@@ -74,8 +78,11 @@ sealed class TrayIcon : IDisposable
     const uint TPM_RET = 0x100;
     const int HWND_MSG = -3;
     const uint WM_RBUTTONUP = 0x0205, WM_LBUTTONDBLCLK = 0x0203;
+    const uint IMAGE_ICON = 1;
+    const uint LR_LOADFROMFILE = 0x0010;
 
     IntPtr _hwnd;
+    IntPtr _hIcon;
     NID _nid;
     WndProcDel? _wndProc;
     string _hotkey = "";
@@ -107,7 +114,7 @@ sealed class TrayIcon : IDisposable
             uID = 1,
             uFlags = NIF_ICON | NIF_TIP | NIF_MSG,
             uCallbackMessage = WM_APP_TRAY,
-            hIcon = LoadIconW(IntPtr.Zero, (IntPtr)32512),
+            hIcon = LoadAppIcon(),
             szTip = $"Translator  \u2502  {hotkey}",
             szInfo = "",
             szInfoTitle = "",
@@ -155,11 +162,23 @@ sealed class TrayIcon : IDisposable
         else if (cmd == 3) QuitRequested?.Invoke();
     }
 
+    IntPtr LoadAppIcon()
+    {
+        var ico = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets", "app.ico");
+        if (System.IO.File.Exists(ico))
+        {
+            _hIcon = LoadImageW(IntPtr.Zero, ico, IMAGE_ICON, 32, 32, LR_LOADFROMFILE);
+            if (_hIcon != IntPtr.Zero) return _hIcon;
+        }
+        return LoadIconW(IntPtr.Zero, (IntPtr)32512);
+    }
+
     public void Dispose()
     {
         if (!_alive) return;
         _alive = false;
         Shell_NotifyIconW(NIM_DELETE, ref _nid);
         if (_hwnd != IntPtr.Zero) DestroyWindow(_hwnd);
+        if (_hIcon != IntPtr.Zero) DestroyIcon(_hIcon);
     }
 }

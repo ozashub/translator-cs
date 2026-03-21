@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="mica" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1e1e32"/>
+      <stop offset="0.5" stop-color="#1a1a2c"/>
+      <stop offset="1" stop-color="#161624"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="256" cy="240" r="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="80" fill="url(#mica)"/>
+  <rect width="512" height="512" rx="80" fill="url(#glow)"/>
+
+  <path d="M96 160 h180 q22 0 22 22 v96 q0 22 -22 22 h-110 l-36 32 v-32 h-34 q-22 0 -22 -22 v-96 q0 -22 22 -22z"
+        fill="#252540" stroke="#4a4a6a" stroke-width="2.5"/>
+
+  <line x1="132" y1="210" x2="240" y2="210" stroke="#6c6c9a" stroke-width="7" stroke-linecap="round"/>
+  <line x1="132" y1="242" x2="208" y2="242" stroke="#6c6c9a" stroke-width="7" stroke-linecap="round" opacity="0.45"/>
+
+  <path d="M236 212 h180 q22 0 22 22 v96 q0 22 -22 22 h-34 v32 l-36 -32 h-110 q-22 0 -22 -22 v-96 q0 -22 22 -22z"
+        fill="#2a2a4a" stroke="#6366f1" stroke-width="2.5"/>
+
+  <line x1="272" y1="264" x2="380" y2="264" stroke="#8b8bdb" stroke-width="7" stroke-linecap="round"/>
+  <line x1="272" y1="296" x2="344" y2="296" stroke="#8b8bdb" stroke-width="7" stroke-linecap="round" opacity="0.45"/>
+</svg>

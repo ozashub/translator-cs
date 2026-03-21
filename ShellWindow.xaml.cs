@@ -153,7 +153,7 @@ sealed partial class ShellWindow : Window
             UpdatePct.Text = $"{p.pct:F0}%";
         });
 
-        var err = await Updater.DownloadAndRun(release, progress);
+        var err = await Updater.DownloadAndApply(release, progress);
         if (err == null)
         {
             Quit();
