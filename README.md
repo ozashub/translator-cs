@@ -65,4 +65,4 @@ Both are saved and loaded automatically on next launch.
 
 ## License
 
-[MIT](LICENSE)
+[AGPL-3.0](LICENSE)
