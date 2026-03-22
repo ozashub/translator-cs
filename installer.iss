@@ -1,7 +1,7 @@
 [Setup]
 AppId={{7DC1B696-04BA-4818-924B-8CDE5B864B77}
 AppName=Translator
-AppVersion=1.1.0
+AppVersion=1.0.6
 AppPublisher=ozas
 AppPublisherURL=https://github.com/ozashub/translator-cs
 DefaultDirName={commonpf}\Translator
